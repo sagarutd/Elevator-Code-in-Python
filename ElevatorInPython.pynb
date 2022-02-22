@@ -1,0 +1,204 @@
+class Commuter:
+    '''This entity defines the Commuter's blueprint'''
+    
+    def __init__(self, present_level, final_level):   
+        '''This is a parametrized constructor, and this is used to check if the entered levels are valid or not'''
+        if present_level<0 or final_level<0:
+            print('Please enter your current level less tha 0 and the final lavel greater than 0!!')
+            sys.exit(0)            
+        else:
+            self.__present_level=present_level
+            self.__final_level=final_level
+      
+    
+    '''
+    Accessor Methods 
+    
+    '''
+    def get_present_level(self):
+        
+        return self.__present_level
+    
+    def get_final_level(self):
+        
+        return self.__final_level
+    
+    
+    '''
+    Mutator Methods 
+    
+    '''
+    def set_present_level(self,present_level):
+        
+        self.__present_level=present_level
+        
+    def set_final_level(self,final_level):
+        
+        self.__final_level=final_level
+
+   
+
+class Elevator:
+    '''This entity defines the Evelator's blueprint'''
+    
+    def __init__(self,p,b):
+        '''This is a parametrized constructor, and this is used to initialize the hidden variables commuter and apartment'''
+        self.__commuter=p
+        self.__build=b
+        
+    '''
+    Accessor Methods 
+    
+    '''
+    def get_commuter(self):
+        
+        return self.__commuter
+    
+    def get_build(self):
+        
+        return self.__build
+    
+    '''
+    Mutator Methods 
+    
+    '''
+    def set_commuter(self,p):
+        
+        self.__commuter=p
+        
+    def set_build(self,b):
+        
+        self.__build=b
+        
+    
+    def commuters_in(self):
+        '''This method is to let commuters inside of the elevator'''
+        if self.__build.get_present_level() == self.__commuter.get_present_level():
+            
+            print(f'Current Floor: {self.__build.get_present_level()}. New commuters please')
+            
+        elif self.__build.get_present_level() > self.__commuter.get_present_level():
+
+            while self.__build.get_present_level() != self.__commuter.get_present_level():
+                
+                print(f'Present level: {self.__build.get_present_level()}')
+                
+                self.__build.go_one_level_down()
+                
+            print(f'Present level: {self.__build.get_present_level()}\nNew commuters please')
+
+        elif self.__build.get_present_level() < self.__commuter.get_present_level():
+
+            while self.__build.get_present_level() != self.__commuter.get_present_level():
+                
+                print(f'Present level: {self.__build.get_present_level()}')
+                
+                self.__build.go_one_level_up()
+                
+            print(f'Present level: {self.__build.get_present_level()}\nNew commuters please')
+            
+            
+        
+        
+        
+    def commuters_out(self):
+        '''This method is to let commuters outside of the elevator'''
+        if self.__build.get_present_level() == self.__commuter.get_final_level():
+            
+            print(f'Current Floor: {self.__build.get_present_level()}.\nDestination Arrived')
+            
+        elif self.__build.get_present_level() > self.__commuter.get_final_level():
+
+            while self.__build.get_present_level() != self.__commuter.get_final_level():
+                
+                print(f'Present level: {self.__build.get_present_level()}')
+                
+                self.__build.go_one_level_down()
+                
+            print(f'Present level: {self.__build.get_present_level()}.\nDestination Arrived')
+
+        elif self.__build.get_present_level() < self.__commuter.get_final_level():
+
+            while self.__build.get_present_level() != self.__commuter.get_final_level():
+                
+                print(f'Present level: {self.__build.get_present_level()}')
+                
+                self.__build.go_one_level_up()
+                
+            print(f'Present level: {self.__build.get_present_level()}\nDestination Arrived')
+    
+    
+    def trace(self):
+        '''This method is used to remove the traced floor from the elevator list'''
+        if (self.__commuter.get_final_level()>self.__build.get_total_floor()) or (self.__commuter.get_present_level()>self.__build.get_total_floor()):        
+            print('Invlid Commuter level selected!!')
+            sys.exit(0)
+        
+        self.commuters_in()       
+        self.commuters_out()
+        
+        
+        
+class Apartment:
+    '''This entity defines the Apartment's blueprint'''
+    
+    def __init__(self,total_floor,present_level):
+        '''This is a parametrized constructor, and this is used to check if the entered levels are valid or not'''
+        if total_floor < 0 or present_level < 0 or present_level > total_floor:
+            
+            print('Invalid Parameter commutered!! Try Again')
+            sys.exit(0)
+       
+        else:           
+            self.__total_floor=total_floor
+            self.__present_level=present_level
+    
+    '''
+    Accessor Methods 
+    
+    '''
+    def get_total_floor(self):
+        
+        return self.__total_floor
+    
+    def get_present_level(self):
+        
+        return self.__present_level
+    
+    
+    '''
+    Mutator Methods 
+    
+    '''
+    def set_total_floor(self, total_floor):
+        
+        self.__total_floor=total_floor
+        
+    def set_present_level(self,present_level):
+        
+        self.__present_level=present_level
+        
+        
+        
+    def go_one_level_up(self):
+        '''This method is used to increment the traced floor'''
+        self.__present_level+=1
+        
+    def go_one_level_down(self):
+        '''This method is used to decrement the traced floor'''
+        self.__present_level-=1     
+      
+    
+    
+a=Apartment(9,3)
+c=Commuter(2,8)
+e=Elevator(c,a)
+e.trace()
+
+print()
+print()
+
+a=Apartment(8,1)
+c=Commuter(4,6)
+e=Elevator(c,a)
+e.trace()
